@@ -16,6 +16,6 @@ set modules \
 for module in $modules
   sugar-load $module
 end
-  ' >> $fish_config
+' > $fish_config
   exec fish
 end
