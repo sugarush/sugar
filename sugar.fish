@@ -1,6 +1,18 @@
-set github_url 'https://github.com'
+set sugar_github_url 'https://github.com'
+set sugar_on_load
 
-function sugar-install -d 'Install a module from GitHub.'
+function @sugar-load -d 'Run a function when the shell is loaded.'
+  set -a sugar_on_load $argv[1]
+end
+
+function sugar-on-load -d 'Run functions in the sugar_on_load array.'
+  for item in $sugar_on_load
+    set item_split (string split ' ' $item)
+    $item_split[1] $item_split[2..-1]
+  end
+end
+
+function sugar-install -d 'Install a module.'
   set -l module_info (string split ':' $argv[1])
   set -l module_repository $module_info[1]
   set -l module_name $module_info[2]
@@ -8,23 +20,19 @@ function sugar-install -d 'Install a module from GitHub.'
 
   sugar-message title "Installing $argv[1] from GitHub."
 
-  git clone $github_url/$module_repository/$module_name.git $module_path
+  git clone $sugar_github_url/$module_repository/$module_name.git $module_path
 
   if ! test $status -eq 0
     sugar-message error "Install failed."
   end
 end
 
-function sugar-load -d 'Load a module from disk or install from GitHub then load from disk.'
+function sugar-load -d 'Load a module.'
   set -l module_info (string split ':' $argv[1])
   set -l module_repository $module_info[1]
   set -l module_name $module_info[2]
   set -l module_path \
     $sugar_install_directory/modules/$module_repository/$module_name
-
-  if ! test -d $module_path
-    sugar-install $argv
-  end
 
   source $module_path/*.fish $module_path
 end
