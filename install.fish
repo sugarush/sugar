@@ -17,6 +17,7 @@ source $sugar_install_directory/sugar.fish
 set modules \
   sugar-core:developer \
   sugar-core:prompt \
+  sugar-core:cd \
   sugar-core:git \
   sugar-core:ssh \
   sugar-core:tmux
