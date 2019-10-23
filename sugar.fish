@@ -34,6 +34,10 @@ function sugar-load -d 'Load a module.'
   set -l module_path \
     $sugar_install_directory/modules/$module_repository/$module_name
 
+  if ! test -d $module_path
+    sugar-install $argv
+  end
+
   source $module_path/*.fish $module_path
 end
 
